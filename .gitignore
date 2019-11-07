@@ -106,3 +106,7 @@ venv.bak/
 # Pycharm files
 
 .idea/
+
+# Repo data files
+
+data/
