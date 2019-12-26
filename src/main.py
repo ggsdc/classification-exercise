@@ -3,7 +3,9 @@ import warnings
 import random
 from src.functions.classification_trees import decision_trees
 from src.functions.KNN_classifier import knn_classifier
+from src.functions.naive_bayes import naive_bayes
 from src.functions.prepare_data import prepare_data
+from src.functions.rule_induction import rule_induction
 from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.preprocessing import MinMaxScaler
 
@@ -31,8 +33,9 @@ print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
 folds = StratifiedKFold(n_splits=10, shuffle=False)
 n_attributes = X_train.shape[1]
 # results = knn_classifier(X_train, y_train, X_test, y_test, folds, n_attributes)
-results = decision_trees(X_train, y_train, X_test, y_test, folds, n_attributes)
-print(results)
+# results = decision_trees(X_train, y_train, X_test, y_test, folds, n_attributes)
+# results = naive_bayes(X_train, y_train, X_test, y_test, folds, n_attributes)
+results = rule_induction(X_train, y_train, X_test, y_test, folds, n_attributes)
 # TODO: cross-validation?
 # TODO: model looping.
 # TODO: model selection.
