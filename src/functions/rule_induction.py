@@ -1,23 +1,22 @@
 from wittgenstein import RIPPER
 
-def rule_induction(X_train, y_train, X_test, y_test, folds, n_attributes):
+
+def rule_induction(x_train, y_train, folds):
     results = dict()
     fold = 1
 
-    for idx_train, idx_test in folds.split(X_train, y_train):
+    for idx_train, idx_test in folds.split(x_train, y_train):
         results[fold] = 0
-        X_train_folds = X_train[idx_train]
-        X_test_folds = X_train[idx_test]
+        x_train_folds = x_train[idx_train]
+        x_test_folds = x_train[idx_test]
         y_train_folds = y_train[idx_train]
         y_test_folds = y_train[idx_test]
-        print(type(X_train_folds), type(y_train_folds))
-        print(X_train_folds, y_train_folds)
+        print(type(x_train_folds), type(y_train_folds))
+        print(x_train_folds, y_train_folds)
         model = RIPPER()
-        model.fit(df=X_train_folds, y=y_train_folds)
-        results[fold] = model.score(X_test_folds, y_test_folds)
+        model.fit(df=x_train_folds, y=y_train_folds)
+        results[fold] = model.score(x_test_folds, y_test_folds)
         print(fold, (results[fold]))
         fold += 1
-
-
 
     return True

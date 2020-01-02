@@ -1,25 +1,26 @@
 import itertools as it
-from sklearn.tree import DecisionTreeClassifier
+
 from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.tree import DecisionTreeClassifier
 
 
-def decision_trees(X_train, y_train, X_test, y_test, folds, n_attributes):
+def decision_trees(x_train, y_train, x_test, y_test, folds):
     results = dict()
-    criterions = ['gini', 'entropy']
+    criteria = ['gini', 'entropy']
     splitters = ['random', 'best']
     fold = 1
-    for c, s in it.product(criterions, splitters):
-        results[(c,s)] = dict()
-        for idx_train, idx_test in folds.split(X_train, y_train):
-            results[(c,s)][fold] = 0
-            X_train_folds = X_train[idx_train]
-            X_test_folds = X_train[idx_test]
+    for c, s in it.product(criteria, splitters):
+        results[(c, s)] = dict()
+        for idx_train, idx_test in folds.split(x_train, y_train):
+            results[(c, s)][fold] = 0
+            x_train_folds = x_train[idx_train]
+            x_test_folds = x_train[idx_test]
             y_train_folds = y_train[idx_train]
             y_test_folds = y_train[idx_test]
 
             model = DecisionTreeClassifier(criterion=c, splitter=s)
-            model.fit(X_train_folds, y_train_folds)
-            results[(c,s)][fold] = model.score(X_test_folds, y_test_folds)
+            model.fit(x_train_folds, y_train_folds)
+            results[(c, s)][fold] = model.score(x_test_folds, y_test_folds)
             print((c, s), fold, (results[(c, s)][fold]))
             fold += 1
 
@@ -36,16 +37,16 @@ def decision_trees(X_train, y_train, X_test, y_test, folds, n_attributes):
 
     print(best_config, best_acc)
 
-    best_model = DecisionTreeClassifier(criterion = best_config[0], splitter=best_config[1])
-    best_model.fit(X_train, y_train)
-    y_pred = best_model.predict(X_test)
-    cm = confusion_matrix(y_test, y_pred)
-    cr = classification_report(y_test, y_pred, output_dict=True)
+    best_model = DecisionTreeClassifier(criterion=best_config[0], splitter=best_config[1])
+    best_model.fit(x_train, y_train)
+    y_prediction = best_model.predict(x_test)
+    cm = confusion_matrix(y_test, y_prediction)
+    cr = classification_report(y_test, y_prediction, output_dict=True)
 
     final_results = dict()
     final_results['folds'] = results
     final_results['model'] = best_model
-    final_results['acc'] = best_model.score(X_test, y_test)
+    final_results['acc'] = best_model.score(x_test, y_test)
     final_results['cm'] = cm
     final_results['cr'] = cr
 

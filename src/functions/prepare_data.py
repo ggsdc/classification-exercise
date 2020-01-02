@@ -1,4 +1,3 @@
-
 def prepare_data(data_df):
     data_df['male'] = data_df.apply(lambda row: row['gender'] == "Male", axis=1)
     data_df['female'] = data_df.apply(lambda row: row['gender'] == "Female", axis=1)
@@ -27,7 +26,7 @@ def prepare_data(data_df):
 
     col_drop = ['gender', 'Partner', 'Dependents', 'PhoneService', 'InternetService', 'MultipleLines', 'OnlineSecurity',
                 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract',
-                'PaperlessBilling', 'PaymentMethod','TotalCharges', 'Churn']
+                'PaperlessBilling', 'PaymentMethod', 'TotalCharges', 'Churn']
 
     data_df = data_df.drop(columns=col_drop)
 
