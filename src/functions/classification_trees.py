@@ -43,10 +43,10 @@ def decision_trees(X_train, y_train, X_test, y_test, folds, n_attributes):
     cr = classification_report(y_test, y_pred, output_dict=True)
 
     final_results = dict()
+    final_results['folds'] = results
     final_results['model'] = best_model
     final_results['acc'] = best_model.score(X_test, y_test)
     final_results['cm'] = cm
     final_results['cr'] = cr
-
 
     return final_results

@@ -16,7 +16,4 @@ def naive_bayes(X_train, y_train, X_test, y_test, folds, n_attributes):
         print(fold, (results[fold]))
         fold += 1
 
-
-
-
-    return True
+    return results
