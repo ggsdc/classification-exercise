@@ -1,16 +1,12 @@
-import datetime as dt
 import random
 import warnings
 
 import pandas as pd
+from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.preprocessing import MinMaxScaler
 
-from src.functions.KNN_classifier import knn_classifier
-from src.functions.classification_trees import decision_trees
-from src.functions.logistic_regression import logistic_regression
-from src.functions.metaclassifiers import bagging, random_forest, gradient_boosting
-from src.functions.naive_bayes import naive_bayes
+from src.functions.model_evaluation import model_evaluation
 from src.functions.prepare_data import prepare_data
 
 # from src.functions.rule_induction import rule_induction
@@ -43,35 +39,38 @@ folds = StratifiedKFold(n_splits=10, shuffle=False)
 n_attributes = X_train.shape[1]
 results = dict()
 
-t1 = dt.datetime.now()
-results['knn'] = knn_classifier(X_train, y_train, X_test, y_test, folds, n_attributes)
-print(dt.datetime.now()-t1)
-
-t1 = dt.datetime.now()
-results['decision-trees'] = decision_trees(X_train, y_train, X_test, y_test, folds)
-print(dt.datetime.now()-t1)
-
-t1 = dt.datetime.now()
-results['naive-bayes'] = naive_bayes(X_train, y_train, X_test, y_test, folds)
-print(dt.datetime.now()-t1)
-
-t1 = dt.datetime.now()
-# results['rule-induction'] = rule_induction(X_train, y_train, folds)
-results['logistic-regression'] = logistic_regression(X_train, y_train, X_test, y_test, folds)
-print(dt.datetime.now()-t1)
-
-t1 = dt.datetime.now()
-results['bagging'] = bagging(X_train, y_train, X_test, y_test, folds)
-print(dt.datetime.now()-t1)
-
-t1 = dt.datetime.now()
-results['random-forest'] = random_forest(X_train, y_train, X_test, y_test, folds)
-print(dt.datetime.now()-t1)
-
-t1 = dt.datetime.now()
-results['gradient-boosting'] = gradient_boosting(X_train, y_train, X_test, y_test, folds)
-print(dt.datetime.now()-t1)
+results['full'] = dict()
+results['full'] = model_evaluation(X_train, y_train, X_test, y_test, folds, n_attributes, skip=True)
 
 # TODO: variable selection
+# Uni-variate variable selection
+
+selector_25 = SelectKBest(f_classif, k=6)
+selector_25.fit(X_train, y_train)
+
+X_train_reduced = selector_25.transform(X_train)
+X_test_reduced = selector_25.transform(X_test)
+n_attributes = X_train_reduced.shape[1]
+
+results['25'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+
+selector_50 = SelectKBest(f_classif, k=13)
+selector_50.fit(X_train, y_train)
+
+X_train_reduced = selector_50.transform(X_train)
+X_test_reduced = selector_50.transform(X_test)
+n_attributes = X_train_reduced.shape[1]
+
+results['50'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+
+selector_75 = SelectKBest(f_classif, k=19)
+selector_75.fit(X_train, y_train)
+
+X_train_reduced = selector_75.transform(X_train)
+X_test_reduced = selector_75.transform(X_test)
+n_attributes = X_train_reduced.shape[1]
+
+results['75'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+
 # TODO: model looping.
 # TODO: model selection.
