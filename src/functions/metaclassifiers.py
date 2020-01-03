@@ -126,7 +126,7 @@ def gradient_boosting(x_train, y_train, x_test, y_test, folds):
     print("GRADIENT BOOSTING")
     results = dict()
 
-    num_estimators = [50, 100, 200]
+    num_estimators = [100, 200, 300, 500]
     criteria = ['gini', 'entropy']
     splitters = ['random', 'best']
     fold = 1

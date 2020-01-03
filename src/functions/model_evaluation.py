@@ -10,7 +10,7 @@ from src.functions.naive_bayes import naive_bayes
 def model_evaluation(x_train, y_train, x_test, y_test, folds, n_attributes, skip=False):
 
     results = dict()
-    if skip:
+    if not skip:
         t1 = dt.datetime.now()
         results['knn'] = knn_classifier(x_train, y_train, x_test, y_test, folds, n_attributes)
         print(dt.datetime.now()-t1)

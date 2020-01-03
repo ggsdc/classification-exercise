@@ -1,3 +1,4 @@
+import pickle as pk
 import random
 import warnings
 
@@ -71,6 +72,10 @@ X_test_reduced = selector_75.transform(X_test)
 n_attributes = X_train_reduced.shape[1]
 
 results['75'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+
+file = open("results.pkl", 'wb')
+pk.dump(results, file)
+file.close()
 
 # TODO: model looping.
 # TODO: model selection.
