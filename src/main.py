@@ -3,9 +3,12 @@ import random
 import warnings
 
 import pandas as pd
-from sklearn.feature_selection import SelectKBest, f_classif
+from math import floor
+from mlxtend.feature_selection import SequentialFeatureSelector
+from sklearn.feature_selection import SelectKBest, f_classif, VarianceThreshold
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold, train_test_split
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, PolynomialFeatures
 
 from src.functions.model_evaluation import model_evaluation
 from src.functions.prepare_data import prepare_data
@@ -43,39 +46,134 @@ results = dict()
 results['full'] = dict()
 results['full'] = model_evaluation(X_train, y_train, X_test, y_test, folds, n_attributes, skip=True)
 
-# TODO: variable selection
-# Uni-variate variable selection
+# Uni-variate filter selection
 
-selector_25 = SelectKBest(f_classif, k=6)
+selector_25 = SelectKBest(f_classif, k=floor(X_train.shape[1]*0.25))
 selector_25.fit(X_train, y_train)
 
 X_train_reduced = selector_25.transform(X_train)
 X_test_reduced = selector_25.transform(X_test)
 n_attributes = X_train_reduced.shape[1]
 
-results['25'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+results['f25u'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
 
-selector_50 = SelectKBest(f_classif, k=13)
+selector_50 = SelectKBest(f_classif, k=floor(X_train.shape[1]*0.5))
 selector_50.fit(X_train, y_train)
 
 X_train_reduced = selector_50.transform(X_train)
 X_test_reduced = selector_50.transform(X_test)
 n_attributes = X_train_reduced.shape[1]
 
-results['50'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+results['f50u'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
 
-selector_75 = SelectKBest(f_classif, k=19)
+selector_75 = SelectKBest(f_classif, k=floor(X_train.shape[1]*0.75))
 selector_75.fit(X_train, y_train)
 
 X_train_reduced = selector_75.transform(X_train)
 X_test_reduced = selector_75.transform(X_test)
 n_attributes = X_train_reduced.shape[1]
 
-results['75'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+results['f75u'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+
+# Wrapper selection
+log_reg = LogisticRegression(penalty="none", solver="saga")
+sfsl = SequentialFeatureSelector(log_reg, k_features=floor(X_train.shape[1]*0.25),
+                                 forward=True, verbose=1, cv=10, scoring='accuracy')
+sfsl = sfsl.fit(X_train, y_train)
+
+X_train_reduced = X_train[:, sfsl.k_feature_idx_]
+X_test_reduced = X_test[:, sfsl.k_feature_idx_]
+n_attributes = X_train_reduced.shape[1]
+
+results['w25u'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+
+sfsl = SequentialFeatureSelector(log_reg, k_features=floor(X_train.shape[1]*0.5),
+                                 forward=True, verbose=1, cv=10, scoring='accuracy')
+sfsl = sfsl.fit(X_train, y_train)
+
+X_train_reduced = X_train[:, sfsl.k_feature_idx_]
+X_test_reduced = X_test[:, sfsl.k_feature_idx_]
+n_attributes = X_train_reduced.shape[1]
+
+results['w50u'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+
+sfsl = SequentialFeatureSelector(log_reg, k_features=floor(X_train.shape[1]*0.75),
+                                 forward=True, verbose=1, cv=10, scoring='accuracy')
+sfsl = sfsl.fit(X_train, y_train)
+
+X_train_reduced = X_train[:, sfsl.k_feature_idx_]
+X_test_reduced = X_test[:, sfsl.k_feature_idx_]
+n_attributes = X_train_reduced.shape[1]
+
+results['w75u'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+
+# Multivariate filter and wrapper
+# First we create the interaction features and then check if they are good to use
+poly = PolynomialFeatures(degree=2, interaction_only=True, include_bias=False)
+X_train_poly = poly.fit_transform(X_train)
+X_test_poly = poly.transform(X_test)
+
+# Now we filter
+selector_25 = SelectKBest(f_classif, k=floor(X_train.shape[1]*0.25))
+selector_25.fit(X_train_poly, y_train)
+
+X_train_reduced = selector_25.transform(X_train_poly)
+X_test_reduced = selector_25.transform(X_test_poly)
+n_attributes = X_train_reduced.shape[1]
+
+
+results['f25m'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+
+selector_50 = SelectKBest(f_classif, k=floor(X_train.shape[1]*0.5))
+selector_50.fit(X_train_poly, y_train)
+
+X_train_reduced = selector_50.transform(X_train_poly)
+X_test_reduced = selector_50.transform(X_test_poly)
+n_attributes = X_train_reduced.shape[1]
+
+results['f50m'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+
+selector_75 = SelectKBest(f_classif, k=floor(X_train.shape[1]*0.75))
+selector_75.fit(X_train_poly, y_train)
+
+X_train_reduced = selector_75.transform(X_train_poly)
+X_test_reduced = selector_75.transform(X_test_poly)
+n_attributes = X_train_reduced.shape[1]
+
+results['f75m'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+
+# Wrapper selection
+log_reg = LogisticRegression(penalty="none", solver="saga")
+sfsl = SequentialFeatureSelector(log_reg, k_features=floor(X_train.shape[1]*0.25),
+                                 forward=True, verbose=1, cv=10, scoring='accuracy')
+sfsl = sfsl.fit(X_train_poly, y_train)
+
+X_train_reduced = X_train_poly[:, sfsl.k_feature_idx_]
+X_test_reduced = X_test_poly[:, sfsl.k_feature_idx_]
+n_attributes = X_train_reduced.shape[1]
+
+results['w25m'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+
+sfsl = SequentialFeatureSelector(log_reg, k_features=floor(X_train.shape[1]*0.5),
+                                 forward=True, verbose=1, cv=10, scoring='accuracy')
+sfsl = sfsl.fit(X_train_poly, y_train)
+
+X_train_reduced = X_train_poly[:, sfsl.k_feature_idx_]
+X_test_reduced = X_test_poly[:, sfsl.k_feature_idx_]
+n_attributes = X_train_reduced.shape[1]
+
+results['w50m'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
+
+sfsl = SequentialFeatureSelector(log_reg, k_features=floor(X_train.shape[1]*0.75),
+                                 forward=True, verbose=1, cv=10, scoring='accuracy')
+sfsl = sfsl.fit(X_train_poly, y_train)
+
+X_train_reduced = X_train_poly[:, sfsl.k_feature_idx_]
+X_test_reduced = X_test_poly[:, sfsl.k_feature_idx_]
+n_attributes = X_train_reduced.shape[1]
+
+results['w75m'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_test, folds, n_attributes, skip=True)
 
 file = open("results.pkl", 'wb')
 pk.dump(results, file)
 file.close()
-
-# TODO: model looping.
-# TODO: model selection.
