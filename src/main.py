@@ -1,3 +1,4 @@
+import datetime as dt
 import random
 import warnings
 
@@ -11,7 +12,8 @@ from src.functions.logistic_regression import logistic_regression
 from src.functions.metaclassifiers import bagging, random_forest, gradient_boosting
 from src.functions.naive_bayes import naive_bayes
 from src.functions.prepare_data import prepare_data
-from src.functions.rule_induction import rule_induction
+
+# from src.functions.rule_induction import rule_induction
 
 warnings.filterwarnings("ignore")
 
@@ -40,14 +42,35 @@ print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
 folds = StratifiedKFold(n_splits=10, shuffle=False)
 n_attributes = X_train.shape[1]
 results = dict()
-results['knn'] = knn_classifier(X_train, y_train, folds, n_attributes)
+
+t1 = dt.datetime.now()
+results['knn'] = knn_classifier(X_train, y_train, X_test, y_test, folds, n_attributes)
+print(dt.datetime.now()-t1)
+
+t1 = dt.datetime.now()
 results['decision-trees'] = decision_trees(X_train, y_train, X_test, y_test, folds)
-results['naive-bayes'] = naive_bayes(X_train, y_train, folds)
-results['rule-induction'] = rule_induction(X_train, y_train, folds)
+print(dt.datetime.now()-t1)
+
+t1 = dt.datetime.now()
+results['naive-bayes'] = naive_bayes(X_train, y_train, X_test, y_test, folds)
+print(dt.datetime.now()-t1)
+
+t1 = dt.datetime.now()
+# results['rule-induction'] = rule_induction(X_train, y_train, folds)
 results['logistic-regression'] = logistic_regression(X_train, y_train, X_test, y_test, folds)
+print(dt.datetime.now()-t1)
+
+t1 = dt.datetime.now()
 results['bagging'] = bagging(X_train, y_train, X_test, y_test, folds)
+print(dt.datetime.now()-t1)
+
+t1 = dt.datetime.now()
 results['random-forest'] = random_forest(X_train, y_train, X_test, y_test, folds)
+print(dt.datetime.now()-t1)
+
+t1 = dt.datetime.now()
 results['gradient-boosting'] = gradient_boosting(X_train, y_train, X_test, y_test, folds)
+print(dt.datetime.now()-t1)
 
 # TODO: variable selection
 # TODO: model looping.

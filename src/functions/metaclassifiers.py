@@ -9,10 +9,10 @@ def bagging(x_train, y_train, x_test, y_test, folds):
     print("BAGGING")
     results = dict()
 
-    num_estimators = [10, 25, 50]
+    num_estimators = [100, 200, 300]
     max_samples = [0.5, 0.75, 0.95]
     max_features = [0.5, 0.75, 0.95]
-    bootstrap_f = [True, False]
+    bootstrap_f = [False]
     fold = 1
     for n, s, f, bf in it.product(num_estimators, max_samples, max_features, bootstrap_f):
         results[(n, s, f, bf)] = dict()
@@ -23,7 +23,7 @@ def bagging(x_train, y_train, x_test, y_test, folds):
             y_train_folds = y_train[idx_train]
             y_test_folds = y_train[idx_test]
 
-            model = BaggingClassifier(n_estimators=n, max_samples=s, max_features=f, bootstrap_features=bf, n_jobs=-1)
+            model = BaggingClassifier(n_estimators=n, max_samples=s, max_features=f, bootstrap_features=bf)
             model.fit(x_train_folds, y_train_folds)
             results[(n, s, f, bf)][fold] = model.score(x_test_folds, y_test_folds)
             fold += 1

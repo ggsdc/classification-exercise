@@ -5,6 +5,7 @@ from sklearn.tree import DecisionTreeClassifier
 
 
 def decision_trees(x_train, y_train, x_test, y_test, folds):
+    print("DECISION TREES")
     results = dict()
     criteria = ['gini', 'entropy']
     splitters = ['random', 'best']
