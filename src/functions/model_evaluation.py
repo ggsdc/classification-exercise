@@ -5,6 +5,7 @@ from src.functions.classification_trees import decision_trees
 from src.functions.logistic_regression import logistic_regression
 from src.functions.metaclassifiers import bagging, random_forest, gradient_boosting
 from src.functions.naive_bayes import naive_bayes
+from src.functions.k_means import k_means
 
 
 def model_evaluation(x_train, y_train, x_test, y_test, folds, n_attributes, skip=False):
@@ -38,6 +39,10 @@ def model_evaluation(x_train, y_train, x_test, y_test, folds, n_attributes, skip
     t1 = dt.datetime.now()
     results['gradient-boosting'] = gradient_boosting(x_train, y_train, x_test, y_test, folds)
     print(dt.datetime.now()-t1)
+
+    t1 = dt.datetime.now()
+    results['k-means'] = k_means(x_train, y_train, x_test, y_test, folds)
+    print(dt.datetime.now() - t1)
 
     # results['rule-induction'] = rule_induction(x_train, y_train, folds)
 
