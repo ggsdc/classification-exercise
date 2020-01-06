@@ -59,20 +59,56 @@
 
 
 \ \\
-KEY WORDS:
-
-
-
+KEY WORDS: Churn prediction; Classification; Clustering; Cross-valdiation; Grid-search
 
 \section{Introduction}
+
+The aim of this work is to predict which clients of a telecom company are going to churn and which are not. In particular the dataset comes IBM Sample Data Sets.
+We will use both classification and clustering to try asses two different things. First, with classification, we will try to build a model that tells us if a customer is going to left the services company based on the training data and available information; second, with clustering, we will try to divide the customers in two groups, which clearly separates the customers that left the company from those that still use the services of the company.
+For both task we will use different methods in order to find which gives es the best accuracy along with explainability and speed.
+All the algorithms that need hiperparameter tunning have been trinen with ten fold cross-validation.
 
 \section{Preliminaries}
 
 \section{Dataset and analysis}
 
+The dataset used for this work comes from the IBM Sample Data Sets (\url{https://community.ibm.com/community/user/businessanalytics/blogs/steven-macko/2017/06/19/guide-to-ibm-cognos-analytics-sample-data-sets}), in the website a more recent version of the dataset can be found.
+
+The dataset does not have any missing value and has both numerical an qualitative attributes. The details of the attributes are:
+
+\begin{enumerate}
+	\item \textbf{customerID}: Unique ID code for each customer. It will not be used in the analysis.
+	\item \textbf{gender}: Qualitative variable if the customer is either female or male. It is fairly balanced (49.52\% female).
+	\item \textbf{SeniorCitizen}: Binary variable if the customer is considered a senior citizen. It is not well balanced (16.21\% senior).
+	\item \textbf{Partner}: Qualitative variable (yes / no) if the customer has a partner. It is well balanced (45.94\% yes).
+	\item \textbf{Dependents}: Qualitative variable (yes / no) if the customer has dependents. It is not well balanced (29,95\% yes).
+	\item \textbf{tenure}: Quantitative variable (integer) with the amount of months the customer has been with the company.
+	\item \textbf{PhoneService}: Qualitative variable (yes / no) if the customer has phone service with the company.
+	\item \textbf{MultipleLines}: Qualitative variable (yes / no / no phone service) if the customer has multiple phone lines.
+	\item \textbf{InternetService}: Qualitative variable (DSL / Fiber optic/no) if the customer has internet service with the company.
+	\item \textbf{OnlineSecurity}: Qualitative variable (yes / no / no internet service) if the customer has online security with the company.
+	\item \textbf{OnlineBackup}: Qualitative variable (yes / no / no internet service) if the customer has online backup with the company.
+	\item \textbf{DeviceProtection}: Qualitative variable (yes / no / no internet service) if the customer has device protection with the company.
+	\item \textbf{TechSupport}: Qualitative variable (yes / no / no internet service) if the customer has tech support with the company.
+	\item \textbf{StreamingTV}: Qualitative variable (yes / no / no internet service) if the customer has streaming tv with the company.
+	\item \textbf{StreamingMovies}: Qualitative variable (yes / no / no internet service) if the customer has streaming movies with the company.
+	\item \textbf{Contract}: Qualitative variable (Month-to-month / One year / Two year) indicating the type of contratc that the customer has.
+	\item \textbf{PaperlessBilling}: Qualitative variable (yes / no) if the customer has paperless billing or not.
+	\item \textbf{PaymentMethod}: Qualitative variable (Bank transfer / credit card / electronic check / mailed check) indicating the payment method used by the customer.
+	\item \textbf{MonthlyCharges}: Quantitative variable (real) with the amount the customer has to pay everymonth.
+	\item \textbf{TotalCharges}: Quantitative variable (real) with the amount the customer has paid during their tenure with the company.
+	\item \textbf{Churn}: Qualitative variable (yes / no) if the customer has left the company.
+\end{enumerate}
+
+In order to apply the algorithms for classification and clustering two pre-processes are going to be applied: the quantitative variables of $n$ levels are going to be one-hot encoded in $n-1$ variables; and all the variables are going to be scaled to the [0, 1] range.
+
 \section{Methodology}
 
 \subsection{Classification}
+
+We are going to be apply the following algorithms for the classification part of the work: \textit{k-nearest-neighbors} (\textit{knn}, with a similar approach as condensed nearest neighbors algorithm, \cite{hart1968}), classification trees (with the CART algorithm, \cite{breiman1984), a naive bayes classifier (\cite{minsky1961}), logistic regression (), rule induction (), and a series of metaclassifiers: bagging of classification trees (\cite{breiman1996}), random forest (\cite{breiman2001}) and gradient boosting with classification trees (\cite{freund1997}).
+
+For all the algorithms that are going to be used we are going to apply the same methodology
 
 \subsection{Clustering}
 
@@ -88,35 +124,24 @@ KEY WORDS:
 \bibliographystyle{plainnat}
 \begin{thebibliography}{}
 
-\bibitem[Aliferis \textit{et al}, 2010]{ali2010}
-Aliferis FC, Statnikov A, Tsamardinos I, Subramani M, Koutsoukos XD (2010). "Local Causal and Markov Blanket Induction for Causal Discovery and Feature Selection for Classification Part I: Algorithms and Empirical Evaluation". Journal of Machine Learning Research, 11:171–234.
+\bibitem[Breiman \textit{et al}, 1984]{breiman1984}
+Breiman, L., Friedman, J. H., Olshen, R., & Stone, C. J. (1984). \textit{Classification and Regression Trees}.
 
-\bibitem[Chow and Liu, 1968]{chow1968}
-Chow CK, Liu CN (1968). "Approximating Discrete Probability Distributions with Dependence Trees", IEEE Transactions on Information Theory, IT-14 3:462–467.
+\bibitem[Breiman, 1996]{breiman1996}
+Breiman, L. (1996). Bagging predictors. Machine learning, 24(2), 123-140
 
-\bibitem[Colombo and Maathuis, 2014]{colombo2014}
-Colombo D, Maathuis MH (2014). "Order-Independent Constraint-Based Causal Structure Learning". Journal of Machine Learning Research, 15:3921–3962.
+\bibitem[Breiman, 2001]{breiman2001}
+Breiman, L. (2001). Random forests. Machine learning, 45(1), 5-32.
 
-\bibitem[Gasse \textit{et al}, 2014]{gasse2014}
-Gasse M, Aussem A, Elghazel H (2014). "A Hybrid Algorithm for Bayesian Network Structure Learning with Application to Multi-Label Learning". Expert Systems with Applications, 41(15):6755–6772.
+\bibitem[Freund and Schapire, 1997]{freund1997}
+Freund, Y., & Schapire, R. E. (1997). A decision-theoretic generalization of on-line learning and an application to boosting. Journal of computer and system sciences, 55(1), 119-139
 
-\bibitem[Margaritis, 2003]{marga2003}
-Margaritis D (2003). Learning Bayesian Network Model Structure from Data. Ph.D. thesis, School of Computer Science, Carnegie-Mellon University, Pittsburgh, PA
+\bibitem[Hart, 1968]{hart1968}
+Hart, P. (1968). The condensed nearest neighbor rule (Corresp.). IEEE transactions on information theory, 14(3), 515-516.
 
-\bibitem[Pearl, 1988]{pearl1989}
-Pearl, J. (1998) \textit{Probabilistic Reasoning in Intelligent Systems: Networks of Plausible Inference}. Morgan Kaufmann Publishers Inc. San Francisco, CA, USA.
+\bibitem[Minsky, 1961]{minsky1961}
+Minsky, M. (1961). Steps toward artificial intelligence. Proceedings of the IRE, 49(1), 8-30
 
-\bibitem[Russell and Norvig, 2009]{Russell2009}
-Russell, SJ., Norvig, P. (2009) \textit{Artificial Intelligence: A Modern Approach}. 3rd edition, Prentice Hall.
-
-\bibitem[Scutari and Denis, 2004]{bnlearn}
-Marco Scutari, Jean-Baptiste Denis. (2014) \textit{Bayesian Networks with Examples in R.} Chapman and Hall, Boca Raton. ISBN 978-1-4822-2558-7.
-
-\bibitem[Tsamardinos \textit{et al}, 2003]{tsar2003}
-Tsamardinos I, Aliferis CF, Statnikov A (2003). "Algorithms for Large Scale Markov Blanket Discovery". Proceedings of the Sixteenth International Florida Artificial Intelligence Research Society Conference, 376–381.
-
-\bibitem[Tsamardinos \textit{et al}, 2006]{tsar2006}
-Tsamardinos I, Brown LE, Aliferis CF (2006). "The Max-Min Hill-Climbing Bayesian Network Structure Learning Algorithm". Machine Learning, 65(1):31–78.
 
 \end{thebibliography}
 
