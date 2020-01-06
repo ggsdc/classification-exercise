@@ -6,9 +6,10 @@ from src.functions.logistic_regression import logistic_regression
 from src.functions.metaclassifiers import bagging, random_forest, gradient_boosting
 from src.functions.naive_bayes import naive_bayes
 from src.functions.k_means import k_means
+from src.functions.hierarchical_clustering import hierarchical_clustering
 
 
-def model_evaluation(x_train, y_train, x_test, y_test, folds, n_attributes, skip=False):
+def model_evaluation(x_train, y_train, x_test, y_test, x, y, folds, n_attributes, skip=False):
 
     results = dict()
     if not skip:
@@ -20,28 +21,32 @@ def model_evaluation(x_train, y_train, x_test, y_test, folds, n_attributes, skip
     results['decision-trees'] = decision_trees(x_train, y_train, x_test, y_test, folds)
     print(dt.datetime.now()-t1)
 
-    t1 = dt.datetime.now()
-    results['naive-bayes'] = naive_bayes(x_train, y_train, x_test, y_test, folds)
-    print(dt.datetime.now()-t1)
+    # t1 = dt.datetime.now()
+    # results['naive-bayes'] = naive_bayes(x_train, y_train, x_test, y_test, folds)
+    # print(dt.datetime.now()-t1)
+    #
+    # t1 = dt.datetime.now()
+    # results['logistic-regression'] = logistic_regression(x_train, y_train, x_test, y_test, folds)
+    # print(dt.datetime.now()-t1)
+    #
+    # t1 = dt.datetime.now()
+    # results['bagging'] = bagging(x_train, y_train, x_test, y_test, folds)
+    # print(dt.datetime.now()-t1)
+    #
+    # t1 = dt.datetime.now()
+    # results['random-forest'] = random_forest(x_train, y_train, x_test, y_test, folds)
+    # print(dt.datetime.now()-t1)
+    #
+    # t1 = dt.datetime.now()
+    # results['gradient-boosting'] = gradient_boosting(x_train, y_train, x_test, y_test, folds)
+    # print(dt.datetime.now()-t1)
 
     t1 = dt.datetime.now()
-    results['logistic-regression'] = logistic_regression(x_train, y_train, x_test, y_test, folds)
-    print(dt.datetime.now()-t1)
+    results['k-means'] = k_means(x_train, y_train, x, y, folds)
+    print(dt.datetime.now() - t1)
 
     t1 = dt.datetime.now()
-    results['bagging'] = bagging(x_train, y_train, x_test, y_test, folds)
-    print(dt.datetime.now()-t1)
-
-    t1 = dt.datetime.now()
-    results['random-forest'] = random_forest(x_train, y_train, x_test, y_test, folds)
-    print(dt.datetime.now()-t1)
-
-    t1 = dt.datetime.now()
-    results['gradient-boosting'] = gradient_boosting(x_train, y_train, x_test, y_test, folds)
-    print(dt.datetime.now()-t1)
-
-    t1 = dt.datetime.now()
-    results['k-means'] = k_means(x_train, y_train, x_test, y_test, folds)
+    results['hierarchical'] = hierarchical_clustering(x_train, y_train, x, y)
     print(dt.datetime.now() - t1)
 
     # results['rule-induction'] = rule_induction(x_train, y_train, folds)

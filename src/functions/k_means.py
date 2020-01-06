@@ -2,7 +2,8 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import confusion_matrix, classification_report
 
 
-def k_means(x_train, y_train, x_test, y_test, folds):
+def k_means(x_train, y_train, x, y, folds):
+    print('KMEANS')
     n_cl = 2
     initialization = ['random', 'k-means++']
     results = dict()
@@ -36,9 +37,9 @@ def k_means(x_train, y_train, x_test, y_test, folds):
             best_config = i
 
     best_model = KMeans(n_clusters=n_cl, init=best_config)
-    best_model.fit(x_train)
-    cm = confusion_matrix(y_test, best_model.predict(x_test))
-    cr = classification_report(y_test, best_model.predict(x_test), output_dict=True)
+    best_model.fit(x)
+    cm = confusion_matrix(y, best_model.labels_)
+    cr = classification_report(y, best_model.labels_, output_dict=True)
 
     final_results = dict()
     final_results['folds'] = results
