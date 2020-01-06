@@ -5,7 +5,7 @@ import warnings
 import pandas as pd
 from math import floor
 from mlxtend.feature_selection import SequentialFeatureSelector
-from sklearn.feature_selection import SelectKBest, f_classif, VarianceThreshold
+from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.preprocessing import MinMaxScaler, PolynomialFeatures
