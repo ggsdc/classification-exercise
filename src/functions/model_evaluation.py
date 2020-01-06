@@ -21,25 +21,25 @@ def model_evaluation(x_train, y_train, x_test, y_test, x, y, folds, n_attributes
     results['decision-trees'] = decision_trees(x_train, y_train, x_test, y_test, folds)
     print(dt.datetime.now()-t1)
 
-    # t1 = dt.datetime.now()
-    # results['naive-bayes'] = naive_bayes(x_train, y_train, x_test, y_test, folds)
-    # print(dt.datetime.now()-t1)
-    #
-    # t1 = dt.datetime.now()
-    # results['logistic-regression'] = logistic_regression(x_train, y_train, x_test, y_test, folds)
-    # print(dt.datetime.now()-t1)
-    #
-    # t1 = dt.datetime.now()
-    # results['bagging'] = bagging(x_train, y_train, x_test, y_test, folds)
-    # print(dt.datetime.now()-t1)
-    #
-    # t1 = dt.datetime.now()
-    # results['random-forest'] = random_forest(x_train, y_train, x_test, y_test, folds)
-    # print(dt.datetime.now()-t1)
-    #
-    # t1 = dt.datetime.now()
-    # results['gradient-boosting'] = gradient_boosting(x_train, y_train, x_test, y_test, folds)
-    # print(dt.datetime.now()-t1)
+    t1 = dt.datetime.now()
+    results['naive-bayes'] = naive_bayes(x_train, y_train, x_test, y_test, folds)
+    print(dt.datetime.now()-t1)
+
+    t1 = dt.datetime.now()
+    results['logistic-regression'] = logistic_regression(x_train, y_train, x_test, y_test, folds)
+    print(dt.datetime.now()-t1)
+
+    t1 = dt.datetime.now()
+    results['bagging'] = bagging(x_train, y_train, x_test, y_test, folds)
+    print(dt.datetime.now()-t1)
+
+    t1 = dt.datetime.now()
+    results['random-forest'] = random_forest(x_train, y_train, x_test, y_test, folds)
+    print(dt.datetime.now()-t1)
+
+    t1 = dt.datetime.now()
+    results['gradient-boosting'] = gradient_boosting(x_train, y_train, x_test, y_test, folds)
+    print(dt.datetime.now()-t1)
 
     t1 = dt.datetime.now()
     results['k-means'] = k_means(x_train, y_train, x, y, folds)
