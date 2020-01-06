@@ -1,6 +1,7 @@
+import itertools as it
+
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import confusion_matrix, classification_report
-import itertools as it
 
 
 def hierarchical_clustering(x_train, y_train, x, y):
@@ -20,7 +21,7 @@ def hierarchical_clustering(x_train, y_train, x, y):
             results[(a, l)] = 1 - aux
         print((a, l), results[(a, l)])
 
-    best_acc=0
+    best_acc = 0
     best_config = tuple()
     for i in results:
         if results[i] > best_acc:
