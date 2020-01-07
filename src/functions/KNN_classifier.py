@@ -7,7 +7,7 @@ from sklearn.neighbors import KNeighborsClassifier
 # TODO: try with different weights and distances to get different results -> Brute force
 # TODO: brute force number of neighbors.
 
-def knn_classifier(x_train, y_train, x_test, y_test, folds, n_attributes):
+def knn_classifier_wo_folds(x_train, y_train, x_test, y_test, n_attributes):
     print("CNN")
     distances = [1, 2]  # Manhattan and euclidean
     results = dict()

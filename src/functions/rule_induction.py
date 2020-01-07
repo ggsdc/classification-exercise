@@ -1,22 +1,28 @@
+import pandas as pd
+from sklearn.metrics import confusion_matrix, classification_report
 from wittgenstein import RIPPER
 
 
-def rule_induction(x_train, y_train, folds):
-    results = dict()
-    fold = 1
+def rule_induction(x_train, y_train, x_test, y_test):
+    final_results = dict()
 
-    for idx_train, idx_test in folds.split(x_train, y_train):
-        results[fold] = 0
-        x_train_folds = x_train[idx_train]
-        x_test_folds = x_train[idx_test]
-        y_train_folds = y_train[idx_train]
-        y_test_folds = y_train[idx_test]
-        print(type(x_train_folds), type(y_train_folds))
-        print(x_train_folds, y_train_folds)
-        model = RIPPER()
-        model.fit(df=x_train_folds, y=y_train_folds)
-        results[fold] = model.score(x_test_folds, y_test_folds)
-        print(fold, (results[fold]))
-        fold += 1
+    df_train = pd.DataFrame(x_train)
+    df_train['churn'] = pd.Series(y_train)
 
-    return True
+    x_test = pd.DataFrame(x_test)
+    y_test = pd.DataFrame(y_test)
+
+    model = RIPPER(verbosity=2)
+    model.fit(df_train, class_feat="churn")
+    y_prediction = model.predict(x_test)
+    cm = confusion_matrix(y_test, y_prediction)
+    cr = classification_report(y_test, y_prediction, output_dict=True)
+
+    final_results['model'] = model
+    final_results['acc'] = (cm[0][0] + cm[1][1]) / (cm[0][0] + cm[1][0] + cm[0][1] + cm[1][1])
+    final_results['cm'] = cm
+    final_results['cr'] = cr
+
+    print(final_results['acc'])
+
+    return final_results

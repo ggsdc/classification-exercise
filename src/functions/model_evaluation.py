@@ -1,12 +1,13 @@
 import datetime as dt
 
-from src.functions.KNN_classifier import knn_classifier
+from src.functions.KNN_classifier import knn_classifier_wo_folds
 from src.functions.classification_trees import decision_trees
+from src.functions.hierarchical_clustering import hierarchical_clustering
+from src.functions.k_means import k_means
 from src.functions.logistic_regression import logistic_regression
 from src.functions.metaclassifiers import bagging, random_forest, gradient_boosting
 from src.functions.naive_bayes import naive_bayes
-from src.functions.k_means import k_means
-from src.functions.hierarchical_clustering import hierarchical_clustering
+from src.functions.rule_induction import rule_induction
 
 
 def model_evaluation(x_train, y_train, x_test, y_test, x, y, folds, n_attributes, skip=False):
@@ -14,7 +15,7 @@ def model_evaluation(x_train, y_train, x_test, y_test, x, y, folds, n_attributes
     results = dict()
     if not skip:
         t1 = dt.datetime.now()
-        results['knn'] = knn_classifier(x_train, y_train, x_test, y_test, folds, n_attributes)
+        results['knn'] = knn_classifier_wo_folds(x_train, y_train, x_test, y_test, n_attributes)
         print(dt.datetime.now()-t1)
 
     t1 = dt.datetime.now()
@@ -49,6 +50,8 @@ def model_evaluation(x_train, y_train, x_test, y_test, x, y, folds, n_attributes
     results['hierarchical'] = hierarchical_clustering(x_train, y_train, x, y)
     print(dt.datetime.now() - t1)
 
-    # results['rule-induction'] = rule_induction(x_train, y_train, folds)
+    t1 = dt.datetime.now()
+    results['rule-induction'] = rule_induction(x_train, y_train, x_test, y_test)
+    print(dt.datetime.now() - t1)
 
     return results
