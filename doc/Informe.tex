@@ -106,15 +106,38 @@ In order to apply the algorithms for classification and clustering two pre-proce
 
 \subsection{Classification}
 
-We are going to be apply the following algorithms for the classification part of the work: \textit{k-nearest-neighbors} (\textit{knn}, with a similar approach as condensed nearest neighbors algorithm, \cite{hart1968}), classification trees (with the CART algorithm, \cite{breiman1984), a naive bayes classifier (\cite{minsky1961}), logistic regression (), rule induction (), and a series of metaclassifiers: bagging of classification trees (\cite{breiman1996}), random forest (\cite{breiman2001}) and gradient boosting with classification trees (\cite{freund1997}).
+We are going to be apply the following algorithms for the classification part of the work: \textit{k-nearest-neighbors} (\textit{knn}, with a similar approach as condensed nearest neighbors algorithm, \cite{hart1968}), classification trees (with the CART algorithm, \cite{breiman1984}), a naive bayes classifier (\cite{minsky1961}), logistic regression, rule induction (RIPPER, \cite{cohen1995}), and a series of metaclassifiers: bagging of classification trees (\cite{breiman1996}), random forest (\cite{breiman2001}) and gradient boosting with classification trees (\cite{freund1997}).
 
-For all the algorithms that are going to be used we are going to apply the same methodology
+For all the algorithms that are going to be used we are going to apply the same methodology:
+
+\begin{enumerate}
+	\item First we split the dataset into train and test with an 80/20 split.
+	\item We train the model on the training data (80\%). For this we use a 10-fold cross-validation to check that the model does not overfit and to select the best parameters for those algorithms that require parameter tunning.
+	\item We evaluate the results (accuracy and confusion matrix) over the 20\% of data that the models have not been trained on.
+	\item We also evaluate the training time for each model and the explainability of the model.
+\end{enumerate}
+
+This methodology is repeated across different versions of the same dataset:
+
+\begin{itemize}
+	\item The original dataset with all 26 attributes.
+	\item A filtered dataset with the 6, 13 and 19 (25\%, 50\% and 75\%) more meaningfull attributes measured with an univariate ANOVA F-value test.
+	\item A wrapped dataset with the 6, 13, and 19 more meaningfull attributes gotten with a stepwise logistic regression model.
+	\item A filtered dataset, processed to include the interactions between attributes, with the 6, 13 and 19 more meaningfull attributes  measured with an univariate ANOVA F-value test.
+	\item A wrapped dataset, processed to include the interactions between attributes, with the 6, 13, and 19 more meaningfull attributes gotten with a stepwise logistic regression model.
+\end{itemize}
 
 \subsection{Clustering}
 
-\section{Classification algorithms}
+\section{Classification algorithms results}
 
-\section{Clustering algorithms}
+\subsection{Full dataset}
+
+\subsection{Univariate filter and wrapper}
+
+\subsection{Multivariate filter and wrapper}
+
+\section{Clustering algorithms results}
 
 \section{Conclusions and future work}
 
@@ -125,7 +148,7 @@ For all the algorithms that are going to be used we are going to apply the same 
 \begin{thebibliography}{}
 
 \bibitem[Breiman \textit{et al}, 1984]{breiman1984}
-Breiman, L., Friedman, J. H., Olshen, R., & Stone, C. J. (1984). \textit{Classification and Regression Trees}.
+Breiman, L., Friedman, J. H., Olshen, R., \& Stone, C. J. (1984). \textit{Classification and Regression Trees}.
 
 \bibitem[Breiman, 1996]{breiman1996}
 Breiman, L. (1996). Bagging predictors. Machine learning, 24(2), 123-140
@@ -133,8 +156,11 @@ Breiman, L. (1996). Bagging predictors. Machine learning, 24(2), 123-140
 \bibitem[Breiman, 2001]{breiman2001}
 Breiman, L. (2001). Random forests. Machine learning, 45(1), 5-32.
 
+\bibitem[Cohen, 1995]{cohen1995}
+Cohen, W. W. (1995). Fast effective rule induction. In Machine learning proceedings 1995 (pp. 115-123). Morgan Kaufmann.
+
 \bibitem[Freund and Schapire, 1997]{freund1997}
-Freund, Y., & Schapire, R. E. (1997). A decision-theoretic generalization of on-line learning and an application to boosting. Journal of computer and system sciences, 55(1), 119-139
+Freund, Y., \& Schapire, R. E. (1997). A decision-theoretic generalization of on-line learning and an application to boosting. Journal of computer and system sciences, 55(1), 119-139
 
 \bibitem[Hart, 1968]{hart1968}
 Hart, P. (1968). The condensed nearest neighbor rule (Corresp.). IEEE transactions on information theory, 14(3), 515-516.
