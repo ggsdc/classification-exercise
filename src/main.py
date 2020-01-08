@@ -160,7 +160,7 @@ results['f75m'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_t
 # Wrapper selection
 log_reg = LogisticRegression(penalty="none", solver="saga")
 sfsl = SequentialFeatureSelector(log_reg, k_features=floor(X_train.shape[1]*0.25),
-                                 forward=True, verbose=1, cv=10, scoring='accuracy')
+                                 forward=True, verbose=1, cv=10, scoring='accuracy', n_jobs=3)
 sfsl = sfsl.fit(X_train_poly, y_train)
 
 X_train_reduced = X_train_poly[:, sfsl.k_feature_idx_]
@@ -172,7 +172,7 @@ results['w25m'] = model_evaluation(X_train_reduced, y_train, X_test_reduced, y_t
                                    X_reduced, y, folds, n_attributes, skip=False)
 
 sfsl = SequentialFeatureSelector(log_reg, k_features=floor(X_train.shape[1]*0.5),
-                                 forward=True, verbose=1, cv=10, scoring='accuracy')
+                                 forward=True, verbose=1, cv=10, scoring='accuracy', n_jobs=3)
 sfsl = sfsl.fit(X_train_poly, y_train)
 
 X_train_reduced = X_train_poly[:, sfsl.k_feature_idx_]
