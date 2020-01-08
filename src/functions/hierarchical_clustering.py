@@ -42,4 +42,4 @@ def hierarchical_clustering(x_train, y_train, x, y):
     final_results['ari'] = adjusted_rand_score(y, best_model.labels_)
     print(final_results['ari'])
 
-    return True
+    return final_results

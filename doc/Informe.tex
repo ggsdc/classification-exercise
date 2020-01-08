@@ -55,6 +55,8 @@
 %\address{}
 
 \begin{abstract}
+Churn is one of the main worries in main telecom companies, where they want to keep the tenure of their clients as long as possible to build an steady income. With the churn dataset collected by IBM and using different methods of classification and clustering we are going to try and predict which clients may churn and leave the telecoms company.
+As we can see in the results we can predict with better accuracy than a random guess if a client will leave the company, being the best model the logistic regression, but the metaclassifiers show a lot of promise and maybe could outperform the logistic regression if tuned up.
 \end{abstract}
 
 
@@ -97,7 +99,7 @@ The dataset does not have any missing value and has both numerical an qualitativ
 	\item \textbf{PaymentMethod}: Qualitative variable (Bank transfer / credit card / electronic check / mailed check) indicating the payment method used by the customer.
 	\item \textbf{MonthlyCharges}: Quantitative variable (real) with the amount the customer has to pay everymonth.
 	\item \textbf{TotalCharges}: Quantitative variable (real) with the amount the customer has paid during their tenure with the company.
-	\item \textbf{Churn}: Qualitative variable (yes / no) if the customer has left the company.
+	\item \textbf{Churn}: Qualitative variable (yes / no) if the customer has left the company. It is not balanced that bad, being the value yes 26.53\% of the dataset.
 \end{enumerate}
 
 In order to apply the algorithms for classification and clustering two pre-processes are going to be applied: the quantitative variables of $n$ levels are going to be one-hot encoded in $n-1$ variables; and all the variables are going to be scaled to the [0, 1] range.
@@ -133,7 +135,7 @@ For the clustering we are going to build the clusters with the whole dataset and
 
 The clustering is going to be applied over the same datasets as the classification algorithms.
 
-The clustering methods to be used are k-means and hierarchical agglomerative clustering (HAC), for these methods different configurations are going to be tested with cross-validation to select the best one. For k-means we are going to try two different initialization methods (random and kmeans++) and hor HAC we are going to try with different distances (manhattan and euclidean) and wqith different linkages (average, complete and single).
+The clustering methods to be used are k-means (\cite{forgy1968}) and hierarchical agglomerative (botton-up) clustering (HAC), for these methods different configurations are going to be tested with cross-validation to select the best one. For k-means we are going to try two different initialization methods (random and kmeans++, \cite{arthur2007}) and hor HAC we are going to try with different distances (manhattan and euclidean) and wqith different linkages (average, complete and single).
 
 \section{Classification algorithms results}
 
@@ -153,7 +155,7 @@ In all the tables the following notation is used: TP as true positive, FP as fal
 KNN & 790 & 229 & 204 & 186 & 0.6927 & 0.7753 & 0.7948 & 0.7849 & 4981.69 & 2490.85 \\ \hline
 Class. tree & 801 & 216 & 201 & 191 & 0.7040 & 0.7876 & 0.7994 & 0.7935 & 1.06 & \textbf{0.03} \\ \hline
 Naive Bayes & 711 & 306 & 69 & 323 & 0.7339 & 0.6991 & \textbf{0.9115} & 0.7913 & \textbf{0.07} & 0.07 \\ \hline
-Rule induction & 1 & 1 & 1 & 1 & 0.5000 & 0.5000 & 0.5000 & 0.5000 & 0.00 \\ \hline
+Rule induction & 451 & 587 & 344 & 27 & 0.3392 & 0.4345 & 0.5673 & 0.4921 & 434.34 & 434.34 \\ \hline
 Log. regression & 908 & 109 & 179 & 213 & \textbf{0.7956} & 0.8928 & 0.8353 & \textbf{0.8631} & 2.46 & 2.46 \\ \hline
 Bagging & 925 & 92 & 203 & 189 & 0.7906 & \textbf{0.9095} & 0.8200 & 0.8625 & 705.67 & 26.14 \\ \hline
 Random forest & 900 & 117 & 192 & 200 & 0.7807 & 0.8850 & 0.8242 & 0.8535 & 567.72 & 23.66 \\ \hline
@@ -168,9 +170,11 @@ As it can be seen logistic regression provides the best accuracy and f1-score, w
 
 While Naive Bayes is the fastest model, it should be taken into accout that these are the training and testing times and for some algoriths a lot of parameter settings are being tried out in order to get the best results, for example, while logistic regression is only run once for each fold, classification trees are run forty times or bagging is run 29 times with configuration up to 300 individual estimators.
 
-As it can be seen the metaclassifier methods can achieve better rseults than just one tree using configurations up to 500 individual trees but taking a lot of more time. The configurations of these models are tricky and can be searched with various methods, in this case, as it has been said we have used grid search over a small set of predifined values.
+As it can be seen the metaclassifier methods can achieve better results than just one tree using configurations up to 500 individual trees but taking a lot of more time. The configurations of these models are tricky and can be searched with various methods, in this case, as it has been said we have used grid search over a small set of predifined values.
 
 Even though their results are better than the classification tree, they are on par with the logistic regression, being the latter an easier model to explain to a third party or to understand from the researcher point of view.
+
+The time needed to train the KNN should not be taken as the best time, as it has been a custom implementation that can be optimized in order to improve its time performance.
 
 \subsection{Univariate filter and wrapper}
 
@@ -189,7 +193,7 @@ The results are slighty worse with 6 attributes than with the full dataset, whil
 KNN & 808 & 211 & 214 & 176 & 0.6984 & 0.7929 & 0.7906 & 0.7918 & 4328.74 & 2164.37 \\ \hline
 Class. tree & 813 & 204 & 219 & 173 & 0.6998 & 0.7994 & 0.7878 & 0.7936 & 0.45 & \textbf{0.01} \\ \hline
 Naive Bayes & 614 & 403 & 55 & 337 & 0.6749 & 0.6037 & \textbf{0.9178} & 0.7284 & \textbf{0.04} & 0.04 \\ \hline
-Rule induction & 1 & 1 & 1 & 1 & 0.5000 & 0.5000 & 0.5000 & 0.5000 & 0.00 \\ \hline
+Rule induction & 860 & 178 & 361 & 10 & 0.6175 & 0.8285 & 0.7043 & 0.7614 & 250.11 & 250.11 \\ \hline
 Log. regression & 923 & 94 & 203 & 189 & \textbf{0.7892} & 0.9076 & 0.8197 & \textbf{0.8614} & 0.21 & 0.21 \\ \hline
 Bagging & 941 & 76 & 261 & 131 & 0.7608 & \textbf{0.9253} & 0.7829 & 0.8481 & 325.35 & 12.05 \\ \hline
 Random forest & 860 & 157 & 232 & 160 & 0.7239 & 0.8456 & 0.7875 & 0.8156 & 358.31 & 14.93 \\ \hline
@@ -210,7 +214,7 @@ AdaBoosting & 825 & 192 & 221 & 171 & 0.7069 & 0.8112 & 0.7887 & 0.7998 & 412.82
 KNN & 811 & 208 & 193 & 197 & 0.7154 & 0.7959 & 0.8078 & 0.8018 & 4257.21 & 2128.61 \\ \hline
 Class. Tree & 820 & 197 & 203 & 189 & 0.7161 & 0.8063 & 0.8016 & 0.8039 & 0.79 & \textbf{0.02} \\ \hline
 Naive Bayes & 671 & 346 & 60 & 332 & 0.7119 & 0.6598 & \textbf{0.9179} & 0.7677 & \textbf{0.04} & 0.04 \\ \hline
-Rule induction & 1 & 1 & 1 & 1 & 0.5000 & 0.5000 & 0.5000 & 0.5000 & 0.00 \\ \hline
+Rule induction & 561 & 477 & 346 & 25 & 0.4159 & 0.5405 & 0.6185 & 0.5769 & 313.45 & 313.45 \\ \hline
 Log. regression & 922 & 95 & 195 & 197 & \textbf{0.7942} & 0.9066 & 0.8254 & \textbf{0.8641} & 0.47 & 0.47 \\ \hline
 Bagging & 936 & 81 & 225 & 167 & 0.7828 & \textbf{0.9204} & 0.8062 & 0.8595 & 521.71 & 19.32 \\ \hline
 Random forest & 900 & 117 & 201 & 191 & 0.7743 & 0.8850 & 0.8174 & 0.8499 & 468.54 & 19.52 \\ \hline
@@ -230,7 +234,7 @@ AdaBoosting & 874 & 143 & 207 & 185 & 0.7516 & 0.8594 & 0.8085 & 0.8332 & 618.66
 KNN & 801 & 218 & 198 & 192 & 0.7048 & 0.7861 & 0.8018 & 0.7939 & 4568.64 & 2284.32 \\ \hline
 Class. Tree & 833 & 184 & 182 & 210 & 0.7402 & 0.8191 & 0.8207 & 0.8199 & 0.72 & \textbf{0.02} \\ \hline
 Naive Bayes & 703 & 314 & 68 & 324 & 0.7289 & 0.6912 & \textbf{0.9118} & 0.7864 & \textbf{0.05} & 0.05 \\ \hline
-Rule induction & 1 & 1 & 1 & 1 & 0.5000 & 0.5000 & 0.5000 & 0.5000 & 0.00 \\ \hline
+Rule induction & 474 & 564 & 344 & 27 & 0.3556 & 0.4566 & 0.5795 & 0.5108 & 368.59 & 368.59 \\ \hline
 Log. regression & 910 & 107 & 181 & 211 & \textbf{0.7956} & 0.8948 & 0.8341 & \textbf{0.8634} & 0.91 & 0.91 \\ \hline
 Bagging & 927 & 90 & 215 & 177 & 0.7835 & \textbf{0.9115} & 0.8117 & 0.8587 & 636.76 & 23.58 \\ \hline
 Random forest & 907 & 110 & 190 & 202 & 0.7871 & 0.8918 & 0.8268 & 0.8581 & 528.21 & 22.01 \\ \hline
@@ -255,7 +259,7 @@ The results of the models for these datasets can be seen in the following tables
 KNN & 797 & 222 & 196 & 194 & 0.7033 & 0.7821 & 0.8026 & 0.7922 & 5396.00 & 2698.00 \\ \hline
 Class. Tree & 808 & 209 & 189 & 203 & 0.7175 & 0.7945 & 0.8104 & 0.8024 & 0.69 & \textbf{0.02} \\ \hline
 Naive Bayes & 642 & 375 & 78 & 314 & 0.6785 & 0.6313 & \textbf{0.8917} & 0.7392 & \textbf{0.04} & 0.04 \\ \hline
-Rule induction & 1 & 1 & 1 & 1 & 0.5000 & 0.5000 & 0.5000 & 0.5000 & 0.00 \\ \hline
+Rule induction & 778 & 260 & 305 & 66 & 0.5990 & 0.7495 & 0.7184 & 0.7336 & 189.45 & 189.45 \\ \hline
 Log. regression & 933 & 84 & 216 & 176 & \textbf{0.7871} & 0.9174 & 0.8120 & \textbf{0.8615} & 0.23 & 0.23 \\ \hline
 Bagging & 905 & 112 & 219 & 173 & 0.7651 & \textbf{0.8899} & 0.8052 & 0.8454 & 455.60 & 16.87 \\ \hline
 Random forest & 879 & 138 & 215 & 177 & 0.7495 & 0.8643 & 0.8035 & 0.8328 & 437.30 & 18.22 \\ \hline
@@ -275,7 +279,7 @@ AdaBoosting & 851 & 166 & 203 & 189 & 0.7381 & 0.8368 & 0.8074 & 0.8218 & 498.04
 KNN & 806 & 213 & 198 & 192 & 0.7083 & 0.7910 & 0.8028 & 0.7968 & 4261.04 & 2130.52 \\ \hline
 Class. Tree & 824 & 193 & 192 & 200 & 0.7268 & 0.8102 & 0.8110 & 0.8106 & 0.88 & \textbf{0.02} \\ \hline
 Naive Bayes & 736 & 281 & 101 & 291 & 0.7289 & 0.7237 & \textbf{0.8793} & 0.7940 & \textbf{0.05} & 0.05 \\ \hline
-Rule induction & 1 & 1 & 1 & 1 & 0.5000 & 0.5000 & 0.5000 & 0.5000 & 0.00 \\ \hline
+Rule induction & 745 & 293 & 350 & 21 & 0.5436 & 0.7177 & 0.6804 & 0.6985 & 285.47 & 285.47 \\ \hline
 Log. regression & 923 & 94 & 206 & 286 & \textbf{0.7871} & \textbf{0.9076} & 0.8175 & \textbf{0.8602} & 0.53 & 0.53 \\ \hline
 Bagging & 920 & 97 & 215 & 177 & 0.7786 & 0.9046 & 0.8106 & 0.8550 & 545.66 & 20.21 \\ \hline
 Random forest & 890 & 127 & 210 & 191 & 0.7623 & 0.8751 & 0.8091 & 0.8408 & 504.90 & 21.04 \\ \hline
@@ -295,7 +299,7 @@ AdaBoosting & 889 & 128 & 207 & 185 & 0.7622 & 0.8741 & 0.8111 & 0.8415 & 506.07
 KNN & 816 & 203 & 213 & 177 & 0.7048 & 0.8008 & 0.7930 & 0.7969 & 7861.42 & 3930.71 \\ \hline
 Class. Tree & 823 & 194 & 205 & 187 & 0.7168 & 0.8092 & 0.8006 & 0.8049 & 1.00 & \textbf{0.03} \\ \hline
 Naive Bayes & 687 & 330 & 68 & 324 & 0.7175 & 0.6755 & \textbf{0.9099} & 0.7754 & \textbf{0.06} & 0.06 \\ \hline
-Rule induction & 1 & 1 & 1 & 1 & 0.5000 & 0.5000 & 0.5000 & 0.5000 & 0.00 \\ \hline
+Rule induction & 470 & 568 & 346 & 25 & 0.3513 & 0.4528 & 0.5760 & 0.5070 & 397.56 & 397.56 \\ \hline
 Log. regression & 911 & 106 & 187 & 205 & \textbf{0.7921} & 0.8958 & 0.8297 & \textbf{0.8615} & 0.80 & 0.80 \\ \hline
 Bagging & 925 & 92 & 224 & 168 & 0.7757 & \textbf{0.9095} & 0.8050 & 0.8541 & 663.69 & 24.58 \\ \hline
 Random forest & 877 & 140 & 195 & 197 & 0.7622 & 0.8623 & 0.8181 & 0.8396 & 541.55 & 22.56 \\ \hline
@@ -312,7 +316,13 @@ Again the results are in the same line as with the filtering, getting the best r
 
 For the multivariate filter and wrapper the interactions between attributes have been included, but all those that do not have enough variance have been left out in order to be easier to process the data.
 
-The results for the filtering and wrapper are pretty similar to the ones already  getting the best results with the filter and the 13 attribute model with logistic regression (see table \ref{class:f50m}) and with the wrapping with 19 attributes and the logistic regression (see table \ref{w75m}).
+The results for the filtering and wrapper are pretty similar to the ones already  getting the best results with the filter and the 13 attribute model with logistic regression (see table \ref{class:f50m}) and with the wrapping with 19 attributes and the logistic regression (see table \ref{class:w75m}).
+
+For the filtering, the first 6 attributes we get are: monthly charges, month-to-month contract, monthly charges $x$ month-to-month, multiple lines $x$ dsl, fiber $x$ month-to-month and month-to-mont $x$ electronic check.
+
+For the filtering with 13 attributes we add: optic fiber, two-year contract, electronic check payment, tenure $x$ dependents, monthly-charges $x$ credit card, dependents $x$ two-year contract and fiber $x$ electronic check payment.
+
+For the filtering with 19 attributes we add: tenure $x$ two-year, monthly charges $x$ fiber, multiple lines $x$ security, multiple lines $x$ tv and movies $x$ month-to-month.
 
 \begin{table}
 \centering
@@ -323,7 +333,7 @@ The results for the filtering and wrapper are pretty similar to the ones already
 KNN & 815 & 204 & 213 & 177 & 0.7040 & 0.7998 & 0.7928 & 0.7963 & 6505.00 & 3252.50 \\ \hline
 Class. Tree & 852 & 165 & 202 & 190 & 0.7395 & 0.8378 & 0.8083 & 0.8228 & 0.84 & \textbf{0.02} \\ \hline
 Naive Bayes & 770 & 247 & 112 & 280 & 0.7452 & 0.7571 & \textbf{0.8730} & 0.8110 & \textbf{0.10} & 0.10 \\ \hline
-Rule induction & 1 & 1 & 1 & 1 & 0.5000 & 0.5000 & 0.5000 & 0.5000 & 0.00 \\ \hline
+Rule induction & 886 & 152 & 338 & 33 & 0.6522 & 0.8536 & 0.7239 & 0.7834 & 276.36 & 276.36 \\ \hline
 Log. regression & 915 & 102 & 186 & 206 & \textbf{0.7956} & \textbf{0.8997} & 0.8311 & \textbf{0.8640} & 0.48 & 0.48 \\ \hline
 Bagging & 901 & 116 & 207 & 185 & 0.7708 & 0.8859 & 0.8132 & 0.8480 & 554.27 & 20.53 \\ \hline
 Random forest & 864 & 153 & 201 & 191 & 0.7488 & 0.8496 & 0.8113 & 0.8300 & 503.75 & 20.99 \\ \hline
@@ -336,7 +346,6 @@ AdaBoosting & 856 & 161 & 205 & 187 & 0.7402 & 0.8417 & 0.8068 & 0.8239 & 534.00
 
 \begin{table}
 \centering
-\caption{TableName}
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|}
 \hline
 
@@ -344,7 +353,7 @@ AdaBoosting & 856 & 161 & 205 & 187 & 0.7402 & 0.8417 & 0.8068 & 0.8239 & 534.00
 KNN & 791 & 228 & 206 & 184 & 0.6920 & 0.7763 & 0.7934 & 0.7847 & 6544.94 & 3272.47 \\ \hline
 Class. Tree & 854 & 163 & 203 & 189 & 0.7402 & 0.8397 & 0.8079 & 0.8235 & 0.78 & \textbf{0.02} \\ \hline
 Naive Bayes & 662 & 355 & 92 & 300 & 0.6828 & 0.6509 & \textbf{0.8780} & 0.7476 & \textbf{0.10} & 0.10 \\ \hline
-Rule induction & 1 & 1 & 1 & 1 & 0.5000 & 0.5000 & 0.5000 & 0.5000 & 0.00 \\ \hline
+Rule induction & 581 & 457 & 322 & 49 & 0.4471 & 0.5597 & 0.6434 & 0.5987 & 396.48 & 396.48 \\ \hline
 Log. regression & 907 & 110 & 185 & 207 & \textbf{0.7906} & 0.8918 & 0.8306 & \textbf{0.8601} & 0.44 & 0.44 \\ \hline
 Bagging & 946 & 71 & 264 & 128 & 0.7622 & \textbf{0.9302} & 0.7818 & 0.8496 & 597.30 & 22.12 \\ \hline
 Random forest & 894 & 123 & 217 & 175 & 0.7587 & 0.8791 & 0.8047 & 0.8402 & 532.52 & 22.19 \\ \hline
@@ -357,23 +366,108 @@ AdaBoosting & 882 & 135 & 222 & 170 & 0.7466 & 0.8673 & 0.7989 & 0.8317 & 498.40
 
 \section{Clustering algorithms results}
 
+\subsection{Full dataset}
+
+In table \ref{cl:full} we can see the results of both clustering methods based on the full dataset, the value measured is Adjusted Rand Index. The closer this value is to 1, the better the clustering method it is, the closer it is to zero, the worse, meaning that the labels could considered as independet between the clustering method and the real labels.
+
+\begin{table}
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+
+\textbf{Method} & \textbf{ARI} & \textbf{Type} \\ \hline
+Kmeans & -0.0099 & Auto \\ \hline
+HAC & 0.0918 & Manhattan, complete linkage \\ \hline
+
+\end{tabular}
+\caption{Results for the clustering with the full dataset}
+\label{cl:full}
+\end{table}
+
+As it can be seen in table \ref{cl:full} the clustering methods do not permorf good with the full dataset, being both very close to zero, but with HAC having slightyly better results.
+
+\subsection{Univariate filter and wrapper}
+
+In table \ref{cl:uni} we can see the results of the clustering methods with the univariate filter and wrapper methods. The results are not much better, having the best result in for the filter datasets and either method but not close to the desired results.
+
+For the kmeans, the best results come from the random initialization. For the HAC we have mixed results between distance types and types of linkage (average and complete) discarding always the single linkage.
+
+\begin{table}
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+
+\textbf{Method} & \textbf{Dataset} & \textbf{ARI} & \textbf{Type} \\ \hline
+Kmeans & filter 6 & 0.0900 & k-means++ \\ \hline
+HAC & filter 6 & 0.1037 & euclidean, complete linkage \\ \hline
+Kmeans & filter 13 & 0.0942 & random \\ \hline
+HAC & filter 13 & 0.0932 & euclidean, average linkage \\ \hline
+Kmeans & filter 19 & 0.0992 & random \\ \hline
+HAC & filter 19 & 0.1032 & manhattan, complete linkage \\ \hline
+Kmeans & wrapper 6 & 0.1037 & random \\ \hline
+HAC & wrapper 6 & -0.0042 & euclidean, average linkage \\ \hline
+Kmeans & wrapper 13 & -0.0175 & random \\ \hline
+HAC & wrapper 13 & -0.0271 & manhattan, complete linkage \\ \hline
+Kmeans & wrapper 19 & 0.0989 & random \\ \hline
+HAC & wrapper 19 & 0.0079 & manhattan, complete linkage \\ \hline
+
+\end{tabular}
+\caption{Results for the clustering with the filter and wrapper univariate datasets}
+\label{cl:uni}
+\end{table}
+
+The training and testing time for the models was pretty similar, thats why it is not included in the results.
+
+\subsection{Multivariate filter and wrapper}
+
+In table \ref{cl:mul} we can see the results for the multivariate datasets, in this case the clustering methods perfomr better than in the univariate or full dataset, this can be because with the interactions of variables included it can strengthen the relationship inside the cluster and weaken the relationship between different clusters.
+
+In this case we get better results for both methods for the multivariate filter datasets, whith HAC having a slightly better performance across the board. But for the wrapper datasets the performance goes down, more heavily for the HAC than for the kmeans method, which still has a good performance with the kmeans++ initialization for the dataset with 13 attributes.
+
+\begin{table}
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+
+\textbf{Method} & \textbf{Dataset} & \textbf{ARI} & \textbf{Type} \\ \hline
+Kmeans & filter 6 & 0.1073 & random \\ \hline
+HAC & filter 6 & 0.2495 & euclidean, complete linkage \\ \hline
+Kmeans & filter 13 & 0.2495 & kmeans++ \\ \hline
+HAC & filter 13 & 0.2495 & euclidean, average linkage \\ \hline
+Kmeans & filter 19 & 0.2034 & random \\ \hline
+HAC & filter 19 & 0.2313 & euclidean, single linkage \\ \hline
+Kmeans & wrapper 6 & 0.2377 & random \\ \hline
+HAC & wrapper 6 & 0.1270 & manhattan, average linkage \\ \hline
+Kmeans & wrapper 13 & 0.2254 & kmeans++ \\ \hline
+HAC & wrapper 13 & -0.0455 & euclidean, complete linkage \\ \hline
+Kmeans & wrapper 19 & 0.0078 & random \\ \hline
+HAC & wrapper 19 & -0.0001 & euclidean, single linkage \\ \hline
+
+\end{tabular}
+\caption{Results for the clustering with the filter and wrapper multivariate datasets}
+\label{cl:mul}
+\end{table}
+
+
 \section{Conclusions and future work}
 
-For classification algorithms it has been seen almost all model perform similary for this dataset, having particulary good results logistic regression, Naive Bayes and bagging. Instead of using all the dataset, using a subset of features can help, both in time to train and test the model, as well in the results gotten by the models.
+For classification algorithms it has been seen that almost all model perform similary for this dataset, having particulary good results logistic regression, Naive Bayes and bagging. Instead of using all the dataset, using a subset of features can help, both in time to train and test the model, as well in the results gotten by the models.
 
 Using other startegy to find the best values for the parameters of the metaclassifiers could be another way to improve the results obtained. This could be used in future work, for example, either apply a bigger grid search with more values for the parameters, using bayesian optimisation or using a genetic algorithm.
 
-
+The results for the clustering are not that good, and could probabily be improved with a better feature selection (as seen in the multivariate filter datasets) and maybe with some feature engenieering. Other way to improve the results would be instead of having all the attributes contained in a range of [0, 1] having different scales for different attributes based on expert knowledge.
 
 \section{Acknowledgments}
 
-Thanks to IBM for providing the dataset.
-Thanks to all contribuitors of the libraries used in python to develop these models, particulary sklearn, mlxtend and pandas.
-All code developed can be seen in the following repository: \url{https://github.com/ggsdc/classification-exercise}.
+Thanks to IBM for providing the dataset.Thanks to all contribuitors of the libraries used in python to develop these models, particulary sklearn (\url{https://github.com/scikit-learn/scikit-learn}), mlxtend (\url{https://github.com/rasbt/mlxtend}), pandas (\url{https://github.com/pandas-dev/pandas}) and wittgenstein (\url{https://github.com/imoscovitz/wittgenstein}).
+All code developed in python can be seen in the following repository: \url{https://github.com/ggsdc/classification-exercise}.
 
 
 \bibliographystyle{plainnat}
 \begin{thebibliography}{}
+
+\bibitem[Arthur and Vassilvitskii, 2007]{arthur2007}
+Arthur, D., \& Vassilvitskii, S. (2007, January). k-means++: The advantages of careful seeding. In Proceedings of the eighteenth annual ACM-SIAM symposium on Discrete algorithms (pp. 1027-1035). Society for Industrial and Applied Mathematics.
 
 \bibitem[Breiman \textit{et al}, 1984]{breiman1984}
 Breiman, L., Friedman, J. H., Olshen, R., \& Stone, C. J. (1984). \textit{Classification and Regression Trees}.
@@ -386,6 +480,9 @@ Breiman, L. (2001). Random forests. Machine learning, 45(1), 5-32.
 
 \bibitem[Cohen, 1995]{cohen1995}
 Cohen, W. W. (1995). Fast effective rule induction. In Machine learning proceedings 1995 (pp. 115-123). Morgan Kaufmann.
+
+\bibitem[Forgy, 1968]{forgy1968}
+Forgy, E. W. (1965). Cluster analysis of multivariate data: efficiency versus interpretability of classifications. biometrics, 21, 768-769
 
 \bibitem[Freund and Schapire, 1997]{freund1997}
 Freund, Y., \& Schapire, R. E. (1997). A decision-theoretic generalization of on-line learning and an application to boosting. Journal of computer and system sciences, 55(1), 119-139

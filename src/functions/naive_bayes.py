@@ -1,5 +1,5 @@
 from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import GaussianNB, BernoulliNB
 
 
 def naive_bayes(x_train, y_train, x_test, y_test, folds):
@@ -13,7 +13,7 @@ def naive_bayes(x_train, y_train, x_test, y_test, folds):
         y_train_folds = y_train[idx_train]
         y_test_folds = y_train[idx_test]
 
-        model = GaussianNB()
+        model = BernoulliNB(binarize=0.1)
         model.fit(x_train_folds, y_train_folds)
         results[fold] = model.score(x_test_folds, y_test_folds)
         print(fold, (results[fold]))
