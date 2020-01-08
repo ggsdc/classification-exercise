@@ -63,10 +63,10 @@ KEY WORDS: Churn prediction; Classification; Clustering; Cross-valdiation; Grid-
 
 \section{Introduction}
 
-The aim of this work is to predict which clients of a telecom company are going to churn and which are not. In particular the dataset comes IBM Sample Data Sets.
+The aim of this work is to predict which clients of a telecoms company are going to churn and which are not. In particular the dataset comes IBM Sample Data Sets.
 We will use both classification and clustering to try asses two different things. First, with classification, we will try to build a model that tells us if a customer is going to left the services company based on the training data and available information; second, with clustering, we will try to divide the customers in two groups, which clearly separates the customers that left the company from those that still use the services of the company.
-For both task we will use different methods in order to find which gives es the best accuracy along with explainability and speed.
-All the algorithms that need hiperparameter tunning have been trinen with ten fold cross-validation.
+For both task we will use different methods in order to find which gives es the best accuracy along with explain-ability and speed.
+All the algorithms that need hiper-parameter tuning have been tried with ten fold cross-validation.
 
 \section{Preliminaries}
 
@@ -112,7 +112,7 @@ For all the algorithms that are going to be used we are going to apply the same 
 
 \begin{enumerate}
 	\item First we split the dataset into train and test with an 80/20 split.
-	\item We train the model on the training data (80\%). For this we use a 10-fold cross-validation to check that the model does not overfit and to select the best parameters for those algorithms that require parameter tunning.
+	\item We train the model on the training data (80\%). For this we use a 10-fold cross-validation to check that the model does not overfit and to select the best parameters for those algorithms that require parameter tuning.
 	\item We evaluate the results (accuracy and confusion matrix) over the 20\% of data that the models have not been trained on.
 	\item We also evaluate the training time for each model and the explainability of the model.
 \end{enumerate}
@@ -121,10 +121,10 @@ This methodology is repeated across different versions of the same dataset:
 
 \begin{itemize}
 	\item The original dataset with all 26 attributes.
-	\item A filtered dataset with the 6, 13 and 19 (25\%, 50\% and 75\%) more meaningfull attributes measured with an univariate ANOVA F-value test.
-	\item A wrapped dataset with the 6, 13, and 19 more meaningfull attributes gotten with a stepwise logistic regression model.
-	\item A filtered dataset, processed to include the interactions between attributes, with the 6, 13 and 19 more meaningfull attributes  measured with an univariate ANOVA F-value test.
-	\item A wrapped dataset, processed to include the interactions between attributes, with the 6, 13, and 19 more meaningfull attributes gotten with a stepwise logistic regression model.
+	\item A filtered dataset with the 6, 13 and 19 (25\%, 50\% and 75\%) more meaningful attributes measured with an univariate ANOVA F-value test.
+	\item A wrapped dataset with the 6, 13, and 19 more meaningful attributes gotten with a stepwise logistic regression model.
+	\item A filtered dataset, processed to include the interactions between attributes, with the 6, 13 and 19 more meaningful attributes  measured with an univariate ANOVA F-value test.
+	\item A wrapped dataset, processed to include the interactions between attributes, with the 6, 13, and 19 more meaningful attributes gotten with a stepwise logistic regression model.
 \end{itemize}
 
 \subsection{Clustering}
@@ -133,7 +133,7 @@ For the clustering we are going to build the clusters with the whole dataset and
 
 The clustering is going to be applied over the same datasets as the classification algorithms.
 
-The clustering methods to be used are k-means and hierarchical agglomerative clustering (HAC), for these methods different configurations are going to be tested with cross-validation to select the best one. For k-means we are going to try two different initialization methods (random and kmeans++) and hor HAC we are going to try with different distances (manhattan and euclidean) and wqith different linkages (average, complete and single).
+The clustering methods to be used are k-means and hierarchical agglomerative clustering (HAC), for these methods different configurations are going to be tested with cross-validation to select the best one. For k-means we are going to try two different initialization methods (random and kmeans++) and for HAC we are going to try with different distances (manhattan and euclidean) and with different linkages (average, complete and single).
 
 \section{Classification algorithms results}
 
@@ -164,21 +164,21 @@ AdaBoosting & 856 & 161 & 191 & 201 & 0.7502 & 0.8417 & 0.8176 & 0.8295 & 582.87
 \label{class:full}
 \end{table}
 
-As it can be seen logistic regression provides the best accuracy and f1-score, while baggin provides the best precision and Naive Bayes the best recall. 
+As it can be seen logistic regression provides the best accuracy and f1-score, while bagging provides the best precision and Naive Bayes the best recall. 
 
-While Naive Bayes is the fastest model, it should be taken into accout that these are the training and testing times and for some algoriths a lot of parameter settings are being tried out in order to get the best results, for example, while logistic regression is only run once for each fold, classification trees are run forty times or bagging is run 29 times with configuration up to 300 individual estimators.
+While Naive Bayes is the fastest model, it should be taken into account that these are the training and testing times and for some algorithms a lot of parameter settings are being tried out in order to get the best results, for example, while logistic regression is only run once for each fold, classification trees are run forty times or bagging is run 29 times with configuration up to 300 individual estimators.
 
-As it can be seen the metaclassifier methods can achieve better rseults than just one tree using configurations up to 500 individual trees but taking a lot of more time. The configurations of these models are tricky and can be searched with various methods, in this case, as it has been said we have used grid search over a small set of predifined values.
+As it can be seen the metaclassifier methods can achieve better results than just one tree using configurations up to 500 individual trees but taking a lot of more time. The configurations of these models are tricky and can be searched with various methods, in this case, as it has been said we have used grid search over a small set of predefined values.
 
 Even though their results are better than the classification tree, they are on par with the logistic regression, being the latter an easier model to explain to a third party or to understand from the researcher point of view.
 
 \subsection{Univariate filter and wrapper}
 
-For the univariate filter the selected variables have been: tenure, fiber, month-to-month, two-year, electronic check and total charges for the 6 most important attributes. This get expanded with monthly charges, partner, phone, security, support, one-year contract and paperless billing to get up to 13 attributes. And finally it gets expanded with seniopr citizen, dsl, online backup, bank transfer, credit card payment and mailed check to get up up to 19 attributes, all with p-values inferior to 1.06e-009.
+For the univariate filter the selected variables have been: tenure, fiber, month-to-month, two-year, electronic check and total charges for the 6 most important attributes. This get expanded with monthly charges, partner, phone, security, support, one-year contract and paperless billing to get up to 13 attributes. And finally it gets expanded with senior citizen, dsl, online backup, bank transfer, credit card payment and mailed check to get up up to 19 attributes, all with p-values inferior to 1.06e-009.
 
 In the following tables (\ref{class:f25u}, \ref{class:f50u} and \ref{class:f75u}) we can see the results of the univariate filter dataset and all the methods.
 
-The results are slighty worse with 6 attributes than with the full dataset, while with 13 attributes gets better, but decreases again for 19 attributes and for the full dataset.
+The results are slightly worse with 6 attributes than with the full dataset, while with 13 attributes gets better, but decreases again for 19 attributes and for the full dataset.
 
 \begin{table}
 \centering
@@ -359,16 +359,16 @@ AdaBoosting & 882 & 135 & 222 & 170 & 0.7466 & 0.8673 & 0.7989 & 0.8317 & 498.40
 
 \section{Conclusions and future work}
 
-For classification algorithms it has been seen almost all model perform similary for this dataset, having particulary good results logistic regression, Naive Bayes and bagging. Instead of using all the dataset, using a subset of features can help, both in time to train and test the model, as well in the results gotten by the models.
+For classification algorithms it has been seen almost all model perform similarly for this dataset, having particularly good results logistic regression, Naive Bayes and bagging. Instead of using all the dataset, using a subset of features can help, both in time to train and test the model, as well in the results gotten by the models.
 
-Using other startegy to find the best values for the parameters of the metaclassifiers could be another way to improve the results obtained. This could be used in future work, for example, either apply a bigger grid search with more values for the parameters, using bayesian optimisation or using a genetic algorithm.
+Using other strategy to find the best values for the parameters of the metaclassifiers could be another way to improve the results obtained. This could be used in future work, for example, either apply a bigger grid search with more values for the parameters, using Bayesian optimization or using a genetic algorithm.
 
 
 
 \section{Acknowledgments}
 
 Thanks to IBM for providing the dataset.
-Thanks to all contribuitors of the libraries used in python to develop these models, particulary sklearn, mlxtend and pandas.
+Thanks to all contributors of the libraries used in python to develop these models, particularly sklearn, mlxtend and pandas.
 All code developed can be seen in the following repository: \url{https://github.com/ggsdc/classification-exercise}.
 
 
