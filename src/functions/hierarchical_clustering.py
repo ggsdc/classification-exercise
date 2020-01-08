@@ -1,7 +1,7 @@
 import itertools as it
 
 from sklearn.cluster import AgglomerativeClustering
-from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.metrics import confusion_matrix, classification_report, adjusted_rand_score
 
 
 def hierarchical_clustering(x_train, y_train, x, y):
@@ -13,15 +13,10 @@ def hierarchical_clustering(x_train, y_train, x, y):
     for a, l in it.product(affinity, linkages):
         model = AgglomerativeClustering(n_clusters=n_cl, affinity=a, linkage=l)
         model.fit(x_train)
-        cm = confusion_matrix(y_train, model.labels_)
-        aux = (cm[0][0] + cm[1][1]) / (cm[0][0] + cm[0][1] + cm[1][0] + cm[1][1])
-        if aux > 0.5:
-            results[(a, l)] = aux
-        else:
-            results[(a, l)] = 1 - aux
+        results[(a, l)] = adjusted_rand_score(y_train, model.labels_)
         print((a, l), results[(a, l)])
 
-    best_acc = 0
+    best_acc = -1.1
     best_config = tuple()
     for i in results:
         if results[i] > best_acc:
@@ -41,8 +36,10 @@ def hierarchical_clustering(x_train, y_train, x, y):
         final_results['acc'] = aux
     else:
         final_results['acc'] = 1 - aux
-    print(final_results['acc'])
+
     final_results['cm'] = cm
     final_results['cr'] = cr
+    final_results['ari'] = adjusted_rand_score(y, best_model.labels_)
+    print(final_results['ari'])
 
     return True

@@ -1,5 +1,5 @@
 from sklearn.cluster import KMeans
-from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.metrics import confusion_matrix, classification_report, adjusted_rand_score
 
 
 def k_means(x_train, y_train, x, y, folds):
@@ -16,16 +16,11 @@ def k_means(x_train, y_train, x, y, folds):
             y_test_folds = y_train[idx_test]
             model = KMeans(n_clusters=n_cl, init=i)
             model.fit(x_train_folds)
-            cm = confusion_matrix(y_test_folds, model.predict(x_test_folds))
-            aux = (cm[0][0] + cm[1][1]) / (cm[0][0] + cm[0][1] + cm[1][0] + cm[1][1])
-            if aux > 0.5:
-                results[i][fold] = aux
-            else:
-                results[i][fold] = 1 - aux
+            results[i][fold] = adjusted_rand_score(y_test_folds, model.predict(x_test_folds))
             print((i, fold), results[i][fold])
             fold += 1
 
-    best_acc = 0
+    best_acc = -1.1
     best_config = ''
     for i in results:
         total_acc = 0
@@ -49,8 +44,10 @@ def k_means(x_train, y_train, x, y, folds):
         final_results['acc'] = aux
     else:
         final_results['acc'] = 1 - aux
-    print(final_results['acc'])
+
     final_results['cm'] = cm
     final_results['cr'] = cr
+    final_results['ari'] = adjusted_rand_score(y, best_model.labels_)
+    print(final_results['ari'])
 
     return final_results

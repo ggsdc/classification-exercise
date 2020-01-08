@@ -12,7 +12,7 @@ def rule_induction(x_train, y_train, x_test, y_test):
     x_test = pd.DataFrame(x_test)
     y_test = pd.DataFrame(y_test)
 
-    model = RIPPER(verbosity=2)
+    model = RIPPER(verbosity=1)
     model.fit(df_train, class_feat="churn")
     y_prediction = model.predict(x_test)
     cm = confusion_matrix(y_test, y_prediction)
