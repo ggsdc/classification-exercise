@@ -55,13 +55,13 @@
 %\address{}
 
 \begin{abstract}
-Churn is one of the main worries in main telecom companies, where they want to keep the tenure of their clients as long as possible to build an steady income. With the churn dataset collected by IBM and using different methods of classification and clustering we are going to try and predict which clients may churn and leave the telecoms company.
+Churn is one of the main worries in main telecoms companies, where they want to keep the tenure of their clients as long as possible to build an steady income. With the churn dataset collected by IBM and using different methods of classification and clustering we are going to try and predict which clients may churn and leave the telecoms company.
 As we can see in the results we can predict with better accuracy than a random guess if a client will leave the company, being the best model the logistic regression, but the metaclassifiers show a lot of promise and maybe could outperform the logistic regression if tuned up.
 \end{abstract}
 
 
 \ \\
-KEY WORDS: Churn prediction; Classification; Clustering; Cross-valdiation; Grid-search
+KEY WORDS: Churn prediction; Classification; Clustering; Cross-validation; Grid-search
 
 \section{Introduction}
 
@@ -97,7 +97,7 @@ The dataset does not have any missing value and has both numerical an qualitativ
 	\item \textbf{Contract}: Qualitative variable (Month-to-month / One year / Two year) indicating the type of contratc that the customer has.
 	\item \textbf{PaperlessBilling}: Qualitative variable (yes / no) if the customer has paperless billing or not.
 	\item \textbf{PaymentMethod}: Qualitative variable (Bank transfer / credit card / electronic check / mailed check) indicating the payment method used by the customer.
-	\item \textbf{MonthlyCharges}: Quantitative variable (real) with the amount the customer has to pay everymonth.
+	\item \textbf{MonthlyCharges}: Quantitative variable (real) with the amount the customer has to pay every month.
 	\item \textbf{TotalCharges}: Quantitative variable (real) with the amount the customer has paid during their tenure with the company.
 	\item \textbf{Churn}: Qualitative variable (yes / no) if the customer has left the company. It is not balanced that bad, being the value yes 26.53\% of the dataset.
 \end{enumerate}
@@ -135,7 +135,7 @@ For the clustering we are going to build the clusters with the whole dataset and
 
 The clustering is going to be applied over the same datasets as the classification algorithms.
 
-The clustering methods to be used are k-means (\cite{forgy1968}) and hierarchical agglomerative (botton-up) clustering (HAC), for these methods different configurations are going to be tested with cross-validation to select the best one. For k-means we are going to try two different initialization methods (random and kmeans++, \cite{arthur2007}) and hor HAC we are going to try with different distances (manhattan and euclidean) and wqith different linkages (average, complete and single).
+The clustering methods to be used are k-means (\cite{forgy1968}) and hierarchical agglomerative (botton-up) clustering (HAC), for these methods different configurations are going to be tested with cross-validation to select the best one. For k-means we are going to try two different initialization methods (random and kmeans++, \cite{arthur2007}) and hor HAC we are going to try with different distances (manhattan and euclidean) and with different linkages (average, complete and single).
 
 \section{Classification algorithms results}
 
@@ -170,7 +170,7 @@ As it can be seen logistic regression provides the best accuracy and f1-score, w
 
 While Naive Bayes is the fastest model, it should be taken into account that these are the training and testing times and for some algorithms a lot of parameter settings are being tried out in order to get the best results, for example, while logistic regression is only run once for each fold, classification trees are run forty times or bagging is run 29 times with configuration up to 300 individual estimators.
 
-As it can be seen the metaclassifier methods can achieve better results than just one tree using configurations up to 500 individual trees but taking a lot of more time. The configurations of these models are tricky and can be searched with various methods, in this case, as it has been said we have used grid search over a small set of predifined values.
+As it can be seen the metaclassifier methods can achieve better results than just one tree using configurations up to 500 individual trees but taking a lot of more time. The configurations of these models are tricky and can be searched with various methods, in this case, as it has been said we have used grid search over a small set of predefined values.
 
 Even though their results are better than the classification tree, they are on par with the logistic regression, being the latter an easier model to explain to a third party or to understand from the researcher point of view.
 
@@ -318,7 +318,7 @@ For the multivariate filter and wrapper the interactions between attributes have
 
 The results for the filtering and wrapper are pretty similar to the ones already  getting the best results with the filter and the 13 attribute model with logistic regression (see table \ref{class:f50m}) and with the wrapping with 19 attributes and the logistic regression (see table \ref{class:w75m}).
 
-For the filtering, the first 6 attributes we get are: monthly charges, month-to-month contract, monthly charges $x$ month-to-month, multiple lines $x$ dsl, fiber $x$ month-to-month and month-to-mont $x$ electronic check.
+For the filtering, the first 6 attributes we get are: monthly charges, month-to-month contract, monthly charges $x$ month-to-month, multiple lines $x$ dsl, fiber $x$ month-to-month and month-to-month $x$ electronic check.
 
 For the filtering with 13 attributes we add: optic fiber, two-year contract, electronic check payment, tenure $x$ dependents, monthly-charges $x$ credit card, dependents $x$ two-year contract and fiber $x$ electronic check payment.
 
@@ -384,7 +384,7 @@ HAC & 0.0918 & Manhattan, complete linkage \\ \hline
 \label{cl:full}
 \end{table}
 
-As it can be seen in table \ref{cl:full} the clustering methods do not permorf good with the full dataset, being both very close to zero, but with HAC having slightyly better results.
+As it can be seen in table \ref{cl:full} the clustering methods do not permorf good with the full dataset, being both very close to zero, but with HAC having slightly better results.
 
 \subsection{Univariate filter and wrapper}
 
@@ -416,13 +416,13 @@ HAC & wrapper 19 & 0.0079 & manhattan, complete linkage \\ \hline
 \label{cl:uni}
 \end{table}
 
-The training and testing time for the models was pretty similar, thats why it is not included in the results.
+The training and testing time for the models was pretty similar, that’s why it is not included in the results.
 
 \subsection{Multivariate filter and wrapper}
 
-In table \ref{cl:mul} we can see the results for the multivariate datasets, in this case the clustering methods perfomr better than in the univariate or full dataset, this can be because with the interactions of variables included it can strengthen the relationship inside the cluster and weaken the relationship between different clusters.
+In table \ref{cl:mul} we can see the results for the multivariate datasets, in this case the clustering methods perform better than in the univariate or full dataset, this can be because with the interactions of variables included it can strengthen the relationship inside the cluster and weaken the relationship between different clusters.
 
-In this case we get better results for both methods for the multivariate filter datasets, whith HAC having a slightly better performance across the board. But for the wrapper datasets the performance goes down, more heavily for the HAC than for the kmeans method, which still has a good performance with the kmeans++ initialization for the dataset with 13 attributes.
+In this case we get better results for both methods for the multivariate filter datasets, with HAC having a slightly better performance across the board. But for the wrapper datasets the performance goes down, more heavily for the HAC than for the kmeans method, which still has a good performance with the kmeans++ initialization for the dataset with 13 attributes.
 
 \begin{table}
 \centering
@@ -451,15 +451,15 @@ HAC & wrapper 19 & -0.0001 & euclidean, single linkage \\ \hline
 
 \section{Conclusions and future work}
 
-For classification algorithms it has been seen that almost all model perform similary for this dataset, having particulary good results logistic regression, Naive Bayes and bagging. Instead of using all the dataset, using a subset of features can help, both in time to train and test the model, as well in the results gotten by the models.
+For classification algorithms it has been seen that almost all model perform similarly for this dataset, having particularly good results logistic regression, Naive Bayes and bagging. Instead of using all the dataset, using a subset of features can help, both in time to train and test the model, as well in the results gotten by the models.
 
 Using other strategy to find the best values for the parameters of the metaclassifiers could be another way to improve the results obtained. This could be used in future work, for example, either apply a bigger grid search with more values for the parameters, using Bayesian optimization or using a genetic algorithm.
 
-The results for the clustering are not that good, and could probabily be improved with a better feature selection (as seen in the multivariate filter datasets) and maybe with some feature engenieering. Other way to improve the results would be instead of having all the attributes contained in a range of [0, 1] having different scales for different attributes based on expert knowledge.
+The results for the clustering are not that good, and could probably be improved with a better feature selection (as seen in the multivariate filter datasets) and maybe with some feature engineering. Other way to improve the results would be instead of having all the attributes contained in a range of [0, 1] having different scales for different attributes based on expert knowledge.
 
 \section{Acknowledgments}
 
-Thanks to IBM for providing the dataset.Thanks to all contribuitors of the libraries used in python to develop these models, particulary sklearn (\url{https://github.com/scikit-learn/scikit-learn}), mlxtend (\url{https://github.com/rasbt/mlxtend}), pandas (\url{https://github.com/pandas-dev/pandas}) and wittgenstein (\url{https://github.com/imoscovitz/wittgenstein}).
+Thanks to IBM for providing the dataset.Thanks to all contribuitors of the libraries used in python to develop these models, particularly sklearn (\url{https://github.com/scikit-learn/scikit-learn}), mlxtend (\url{https://github.com/rasbt/mlxtend}), pandas (\url{https://github.com/pandas-dev/pandas}) and wittgenstein (\url{https://github.com/imoscovitz/wittgenstein}).
 All code developed in python can be seen in the following repository: \url{https://github.com/ggsdc/classification-exercise}.
 
 
